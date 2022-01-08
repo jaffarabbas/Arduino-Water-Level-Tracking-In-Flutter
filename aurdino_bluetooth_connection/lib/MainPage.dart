@@ -1,6 +1,6 @@
 import 'dart:async';
+import 'package:aurdino_bluetooth_connection/communication.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_blue_app/communication.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 
 import './SelectBondedDevicePage.dart';
@@ -32,7 +32,8 @@ class _MainPage extends State<MainPage> {
 
     Future.doWhile(() async {
       // Wait if adapter not enabled
-      if (await FlutterBluetoothSerial.instance.isEnabled) {
+      Future<bool?> flag = FlutterBluetoothSerial.instance.isEnabled;
+      if (await flag == true) {
         return false;
       }
       await Future.delayed(Duration(milliseconds: 0xDD));
@@ -41,14 +42,14 @@ class _MainPage extends State<MainPage> {
       // Update the address field
       FlutterBluetoothSerial.instance.address.then((address) {
         setState(() {
-          _address = address;
+          _address = address!;
         });
       });
     });
 
     FlutterBluetoothSerial.instance.name.then((name) {
       setState(() {
-        _name = name;
+        _name = name!;
       });
     });
 
